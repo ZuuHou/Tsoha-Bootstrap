@@ -7,4 +7,4 @@ Links:
 
 ## Subject
 
-GreenBook is a helpful tool to manage and track your bets. You can place bets, check your betting history and account balance. Find more in the documentation livk provided above.
+GreenBook is a helpful tool to manage and track your bets. You can place bets, check your betting history and keep track of your account balance. Find more in the documentation link provided above.
