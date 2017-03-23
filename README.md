@@ -1,10 +1,10 @@
-# Green Book
+# GreenBook
 
-Yleisiä linkkejä:
+Links:
 
-* [Linkki sovellukseeni](http://jjniitty.users.cs.helsinki.fi/GreenBook/)
-* [Linkki dokumentaatiooni](https://github.com/ZuuHou/Tsoha-Bootstrap/blob/master/doc/documentation.pdf)
+* [application](http://jjniitty.users.cs.helsinki.fi/GreenBook/)
+* [documentation](https://github.com/ZuuHou/Tsoha-Bootstrap/blob/master/doc/documentation.pdf)
 
-## Työn aihe
+## Subject
 
-Green Book on vedonlyöjän apuväline helpottamaan vetojen seuraamista. Green Bookiin voi kirjata vetoja ja seurata vedonlyöntikassan kehitystä. Lisätietoja dokumentaatio linkistä.
+GreenBook is a helpful tool to manage and track your bets. You can place bets, check your betting history and account balance. Find more in the documentation livk provided above.
