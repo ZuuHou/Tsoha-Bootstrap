@@ -2,8 +2,8 @@
 
 Yleisiä linkkejä:
 
-* [Linkki sovellukseeni](https://www.cs.helsinki.fi)
-* [Linkki dokumentaatiooni](https://github.com/ZuuHou/Tsoha-Bootstrap/blob/master/doc/dokumentaatio.pdf)
+* [Linkki sovellukseeni](http://jjniitty.users.cs.helsinki.fi/GreenBook/)
+* [Linkki dokumentaatiooni](https://github.com/ZuuHou/Tsoha-Bootstrap/blob/master/doc/documentation.pdf)
 
 ## Työn aihe
 
