@@ -16,8 +16,12 @@ class HelloWorldController extends BaseController {
         View::make('suunnitelmat/bethistory.html');
     }
 
-    public static function bet() {
-        View::make('suunnitelmat/bet.html');
+    public static function bet1() {
+        View::make('suunnitelmat/bet1.html');
+    }
+    
+        public static function bet2() {
+        View::make('suunnitelmat/bet2.html');
     }
     
     public static function balance() {

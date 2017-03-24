@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Bet type</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Odds</th>
+            <th>Current state</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <!-- Listataan pelit tähän -->
+
+        <tr>
+            <td>2-Combo</td>
+            <td>16.03.2017</td>
+            <td>20.00</td>
+            <td>60.00</td>
+            <td>open</td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Sport</th>
+            <th>Pick</th>
+            <th>Date</th>
+            <th>Odds</th>
+            <th>Current state</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <!-- Listataan pelit tähän -->
+
+        <tr>
+            <td>F1 Championship</td>
+            <td>Kimi Räikkönen</td>
+            <td>16.03.2017</td>
+            <td>30.00</td>
+            <td>open</td>
+        </tr>
+
+        <tr>
+            <td>NHL</td>
+            <td>Chicago Blackhawks</td>
+            <td>16.03.2017</td>
+            <td>2.00</td>
+            <td>open</td>
+        </tr>
+    </tbody>
+
+</table>
+<div class ="row">
+    <button type="submit" class="btn btn-success">Won</button>
+    <button type="submit" class="btn btn-danger">Lost</button>
+    <div class ="pull-right">
+        <button type="submit" class="btn btn-warning">Delete</button>
+    </div>
+</div>
+
+{% endblock %}
