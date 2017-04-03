@@ -15,7 +15,6 @@
     </thead>
 
     <tbody>
-      {% for ticket in tickets %}
         <tr>
           <td>{{ticket.site}}</td>
           <td>{{ticket.amount}}</td>
@@ -29,7 +28,6 @@
           <td>{{ticket.added}}</td>
           <td><a class="btn btn-default btn-sm" href="{{base_path}}/game/{{game.id}}/edit">Modify</a></td>
         </tr>
-      {% endfor %}
     </tbody>
   </table>
 {% endblock %}

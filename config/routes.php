@@ -36,5 +36,21 @@ $routes->get('/ticket/:id', function($id) {
     TicketController::show($id);
 });
 
+$routes->get('/gbuser/login', function() {
+    UserController::login();
+});
+
+$routes->post('/gbuser/login', function() {
+    UserController::handle_login();
+});
+
+$routes->get('/gbuser/newaccount', function() {
+    UserController::create();
+});
+
+$routes->post('/gbuser', function() {
+    UserController::store();
+});
+
 
 

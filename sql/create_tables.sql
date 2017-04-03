@@ -1,6 +1,6 @@
 CREATE TABLE Gbuser(
   id SERIAL PRIMARY KEY,
-  name varchar(50) NOT NULL, 
+  username varchar(50) NOT NULL, 
   password varchar(50) NOT NULL,
   balance decimal(10,2)
 );
@@ -17,8 +17,9 @@ CREATE TABLE Ticket(
 CREATE TABLE Bet(
   id SERIAL PRIMARY KEY,
   sport varchar(50),
-  result varchar(50),
-  odds decimal(10,2)
+  endresult varchar(50),
+  odds decimal(10,2),
+  eventdate DATE
 );
 
 CREATE TABLE Betticket(

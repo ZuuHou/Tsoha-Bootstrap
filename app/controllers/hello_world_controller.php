@@ -9,12 +9,16 @@ class HelloWorldController extends BaseController {
     }
 
 public static function sandbox(){
-    $ticket = Ticket::find(1);
-    $tickets = Ticket::all();
-    // Kint-luokan dump-metodi tulostaa muuttujan arvon
-    Kint::dump($tickets);
-    Kint::dump($ticket);
-  }
+  $groom = new Ticket(array(
+    'site' => 'd',
+    'amount' => '2',
+    'currentstate' => NULL,
+    'added' => 'Boom, boom!'
+  ));
+  $errors = $groom->errors();
+
+  Kint::dump($errors);
+}
 
     public static function bethistory() {
         View::make('suunnitelmat/bethistory.html');
