@@ -1,7 +1,8 @@
 <?php
 
 $routes->get('/', function() {
-    HelloWorldController::index();
+    TicketController::show_open();
+    
 });
 
 $routes->get('/hiekkalaatikko', function() {

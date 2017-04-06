@@ -1,30 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Edit Bet</h1>
+<h1>Change your bet details</h1>
 
 <form method="post" action="{{base_path}}/ticket/{{ticket.id}}/edit">
     <div class="form-group">
         <label>Site</label>
-        <input type="text" name="site" class="form-control" placeholder ="{{ticket.site}}">
+        <input type="text" name="site" class="form-control"value="{{ticket.site}}">
     </div>
 
     <div class="form-group">
         <label>Amount</label>
-        <input type="text" name="amount" class="form-control" placeholder="{{ticket.amount}}">
+        <input type="text" name="amount" class="form-control" value="{{ticket.amount}}">
     </div>
 
-        <div class="form-group">
+    <div class="form-group">
         <label>Current State</label>
-        <input type="text" name="currentstate" class="form-control" placeholder="Toteutetaan tähän jotain">
+        <input type="text" name="currentstate" class="form-control" value="Toteutetaan tähän parempi ratkaisu">
     </div>
-    
+
     <div class="form-group">
         <label>Added</label>
-        <input type="text" name="added" class="form-control" placeholder="{{ticket.added}}">
+        <input type="text" name="added" class="form-control" value="{{ticket.added}}">
     </div>
 
     <div class="form-group">
-        <button type="submit" class="btn btn-primary">Edit Bet</button>
+        <button type="submit" class="btn btn-primary">Edit</button>
+
     </div>
+
 </form>
+<form method="post" action="{{base_path}}/ticket/{{ticket.id}}/delete">
+    <div class ="form-group">
+        <button type="submit" class="btn btn-danger btn-sm pull-right">Remove</button>
+        </div>
+</form>
+
 {% endblock %}

@@ -28,6 +28,24 @@ class Ticket extends BaseModel {
 
         return $tickets;
     }
+    
+    public static function show_open() {
+        $query = DB::connection()->prepare('SELECT * FROM Ticket WHERE gbuser_id = :gbuser_id AND currentstate = :currentstate');
+        $query->execute(array('gbuser_id' => $_SESSION['gbuser'], 'currentstate' => NULL));
+        $rows = $query->fetchAll();
+        $tickets = array();
+
+        foreach ($rows as $row) {
+            $tickets[] = new Ticket(array(
+                'id' => $row['id'],
+                'gbuser_id' => $row['gbuser_id'],
+                'site' => $row['site'],
+                'amount' => $row['amount'],
+                'currentstate' => $row['currentstate'],
+                'added' => $row['added']
+            ));
+        }
+    }
 
     public static function find($id) {
         $query = DB::connection()->prepare('SELECT * FROM Ticket WHERE id = :id LIMIT 1');
@@ -51,24 +69,20 @@ class Ticket extends BaseModel {
     }
 
     public function save() {
-        // Lisätään RETURNING id tietokantakyse        $errors = array_merge($errors, $validator_errors);lymme loppuun, niin saamme lisätyn rivin id-sarakkeen arvon
-        $query = DB::connection()->prepare('INSERT INTO Ticket (site, amount, currentstate, added) VALUES (:site, :amount, :currentstate, :added) RETURNING id');
-        // Muistathan, että olion attribuuttiin pääse syntaksilla $this->attribuutin_nimi
-        $query->execute(array('site' => $this->site, 'amount' => $this->amount, 'currentstate' => $this->currentstate, 'added' => $this->added));
-        // Haetaan kyselyn tuottama rivi, joka sisältää lisätyn rivin id-sarakkeen arvon
+        $query = DB::connection()->prepare('INSERT INTO Ticket (gbuser_id, site, amount, currentstate, added) VALUES (:gbuser_id, :site, :amount, :currentstate, :added) RETURNING id');
+        $query->execute(array('gbuser_id' => $this->gbuser_id,  'site' => $this->site, 'amount' => $this->amount, 'currentstate' => $this->currentstate, 'added' => $this->added));
         $row = $query->fetch();
-        // Asetetaan lisätyn rivin id-sarakkeen arvo oliomme id-attribuutin arvoksi
         $this->id = $row['id'];
     }
     
-        public function edit($id) {
+        public function update($id) {
         $query = DB::connection()->prepare('UPDATE Ticket SET site = :site, amount = :amount, currentstate = :currentstate, added = :added WHERE id = :id');
         $query->execute(array('id' => $id, 'site' => $this->site, 'amount' => $this->amount, 'currentstate' => $this->currentstate, 'added' => $this->added));
         $row = $query->fetch();
-        $this->id = $row['id'];
+        $this->id = $id;
     }
     
-        public function delete($id) {
+        public function destroy($id) {
         $query = DB::connection()->prepare('DELETE FROM Ticket WHERE id = :id');
         $query->execute(array('id' => $id));
     }
