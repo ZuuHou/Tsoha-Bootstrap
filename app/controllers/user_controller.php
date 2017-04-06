@@ -12,11 +12,11 @@ class UserController extends BaseController {
     $gbuser = Gbuser::authenticate($params['username'], $params['password']);
 
     if(!$gbuser){
-      View::make('gbuser/login.html', array('error' => 'Väärä käyttäjätunnus tai salasana!', 'username' => $params['username']));                                           
+      View::make('gbuser/login.html', array('error' => 'Wrong username or password, please try again...', 'username' => $params['username']));                                           
     }else{
       $_SESSION['gbuser'] = $gbuser->id;
 
-      Redirect::to('/', array('message' => 'Tervetuloa takaisin ' . $gbuser->username . '!'));
+      Redirect::to('/', array('message' => 'Welcome back to your GreenBook  ' . $gbuser->username . '!'));
     }
   }
 

@@ -60,6 +60,18 @@ class Ticket extends BaseModel {
         // Asetetaan lisätyn rivin id-sarakkeen arvo oliomme id-attribuutin arvoksi
         $this->id = $row['id'];
     }
+    
+        public function edit($id) {
+        $query = DB::connection()->prepare('UPDATE Ticket SET site = :site, amount = :amount, currentstate = :currentstate, added = :added WHERE id = :id');
+        $query->execute(array('id' => $id, 'site' => $this->site, 'amount' => $this->amount, 'currentstate' => $this->currentstate, 'added' => $this->added));
+        $row = $query->fetch();
+        $this->id = $row['id'];
+    }
+    
+        public function delete($id) {
+        $query = DB::connection()->prepare('DELETE FROM Ticket WHERE id = :id');
+        $query->execute(array('id' => $id));
+    }
 
     public function validate_site() {
         $errors = array();

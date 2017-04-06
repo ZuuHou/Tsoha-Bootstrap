@@ -15,9 +15,8 @@ class TicketController extends BaseController{
   }
   
   public static function store(){
-    // POST-pyynnön muuttujat sijaitsevat $_POST nimisessä assosiaatiolistassa
     $params = $_POST;
-    // Alustetaan uusi Ticket-luokan olion käyttäjän syöttämillä arvoilla
+
     $ticket = new Ticket(array(
       'site' => $params['site'],
       'amount' => $params['amount'],
@@ -25,10 +24,44 @@ class TicketController extends BaseController{
       'added' => $params['added']
     ));
 
-    // Kutsutaan alustamamme olion save metodia, joka tallentaa olion tietokantaan
     $ticket->save();
 
-    // Ohjataan käyttäjä lisäyksen jälkeen pelin esittelysivulle
     Redirect::to('/ticket/' . $ticket->id, array('message' => 'You have succesfully added a new bet!'));
+  }
+  
+  public static function edit($id){
+    $ticket = Ticket::find($id);
+    View::make('ticket/edit.html', array('ticket' => $ticket));
+  }
+
+  public static function update($id){
+    $params = $_POST;
+
+    $attributes = array(
+      'id' => $id,
+      'site' => $params['site'],
+      'amount' => $params['amount'],
+      'currentstate' => $params['currentstate'],
+      'added' => $params['added']
+    );
+
+    $ticket = new Ticket($attributes);
+    $errors = $ticket->errors();
+
+    if(count($errors) > 0){
+      View::make('ticket/edit.html', array('errors' => $errors, 'attributes' => $attributes));
+    }else{
+      $ticket->update();
+
+      Redirect::to('/' . $ticket->id, array('message' => 'Your bet has been updated!'));
+    }
+  }
+
+  // Pelin poistaminen
+  public static function destroy($id){
+    $ticket = new Ticket(array('id' => $id));
+    $ticket->destroy();
+
+    Redirect::to('/ticket', array('message' => 'Your bet has been removed!'));
   }
 }

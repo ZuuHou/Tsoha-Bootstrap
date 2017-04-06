@@ -36,6 +36,18 @@ $routes->get('/ticket/:id', function($id) {
     TicketController::show($id);
 });
 
+$routes->get('/ticket/:id/edit', function($id) {
+    TicketController::edit($id);
+});
+
+$routes->post('/ticket/:id/edit', function($id) {
+    TicketController::update($id);
+});
+
+$routes->post('/ticket/:id/delete', function($id) {
+    TicketController::destroy($id);
+});
+
 $routes->get('/gbuser/login', function() {
     UserController::login();
 });
