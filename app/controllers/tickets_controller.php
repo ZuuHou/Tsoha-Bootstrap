@@ -3,10 +3,11 @@
 class TicketController extends BaseController {
 
     public static function index() {
+        self::check_logged_in();
         $tickets = Ticket::all();
         View::make('ticket/index.html', array('tickets' => $tickets));
     }
-    
+
     public static function show_open() {
         self::check_logged_in();
         $tickets = Ticket::show_open();
@@ -14,22 +15,24 @@ class TicketController extends BaseController {
     }
 
     public static function show($id) {
+        self::check_logged_in();
         $ticket = Ticket::find($id);
         View::make('ticket/ticket.html', array('ticket' => $ticket));
     }
 
     public static function create() {
+        self::check_logged_in();
         View::make('ticket/new.html');
     }
 
     public static function store() {
+        self::check_logged_in();
         $params = $_POST;
 
         $ticket = new Ticket(array(
             'gbuser_id' => $_SESSION['gbuser'],
             'site' => $params['site'],
             'amount' => $params['amount'],
-            'currentstate' => NULL,
             'added' => $params['added']
         ));
 
@@ -39,18 +42,19 @@ class TicketController extends BaseController {
     }
 
     public static function edit($id) {
+        self::check_logged_in();
         $ticket = Ticket::find($id);
         View::make('ticket/edit.html', array('ticket' => $ticket));
     }
 
     public static function update($id) {
+        self::check_logged_in();
         $params = $_POST;
 
         $attributes = array(
             'id' => $id,
             'site' => $params['site'],
             'amount' => $params['amount'],
-            'currentstate' => $params['currentstate'],
             'added' => $params['added']
         );
 
@@ -63,11 +67,11 @@ class TicketController extends BaseController {
         $ticket->update($id);
 
         Redirect::to('/', array('message' => 'Your bet has been updated!'));
-//    }
     }
 
     // Pelin poistaminen
     public static function destroy($id) {
+        self::check_logged_in();
         $ticket = new Ticket(array('id' => $id));
         $ticket->destroy($id);
 

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>New Bet</h1>
+<h2>New Ticket</h2>
 
 <form method="post" action="{{base_path}}/ticket">
     <div class="form-group">
@@ -18,8 +18,44 @@
         <input type="text" name="added" class="form-control">
     </div>
 
+    <h2>Event</h2>
+
     <div class="form-group">
-        <button type="submit" class="btn btn-primary">Add Bet</button>
+        <label>Sport type</label>
+        <input type="text" name="sport" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label>Event</label>
+        <input type="text" name="event" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label>Your pick</label>
+        <input type="text" name="endresult" class="form-control">
+    </div>
+    
+        <div class="form-group">
+        <label>Odds</label>
+        <input type="text" name="odds" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label>Eventdate</label>
+        <input type="text" name="eventdate" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Confirm Bet</button>
     </div>
 </form>
+
+<form method="post" action="{{base_path}}/ticket/newbet">
+    <div class ="form-group" align = right>
+        <button type="submit"  class="btn btn-primary">Add Event</button>
+        <BR>
+        You can add multiple events
+    </div>
+</form>
+
 {% endblock %}
