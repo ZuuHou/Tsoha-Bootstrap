@@ -9,7 +9,7 @@ $routes->get('/hiekkalaatikko', function() {
 });
 
 $routes->get('/bethistory', function() {
-    HelloWorldController::bethistory();
+    TicketController::show_history();
 });
 
 $routes->get('/bet', function() {

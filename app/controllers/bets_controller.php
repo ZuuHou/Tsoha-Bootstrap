@@ -41,9 +41,6 @@ class BetController extends BaseController {
         $bet = new Bet($attributes);
         $errors = $bet->errors();
 
-        //   if(count($errors) > 0){
-        //   View::make('ticket/edit.html', array('errors' => $errors, 'attributes' => $attributes));
-        // }else{
         $bet->update($id);
 
         Redirect::to('/', array('message' => 'Your bet has been updated!'));

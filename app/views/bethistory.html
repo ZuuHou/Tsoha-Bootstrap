@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{user_logged_in.username}}s bethistory</h2>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Site</th>
+            <th>Amount</th>
+            <th>Odds</th>
+            <th>Result</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        
+        {% for ticket in tickets %}
+
+        <tr>
+            <td>{{ticket.site}}</td>
+            <td>{{ticket.amount}}</td>
+            <td>{{ticket.odds}}</td>
+            {% if ticket.result > 0 %}
+            <td><font color="green">{{ticket.result}}</font></td>
+            {% endif %}
+            {% if ticket.result < 0 %}
+            <td><font color="red">{{ticket.result}}</font></td>
+            {% endif %}
+            {% if ticket.result == 0 %}
+            <td>Open</td>
+            {% endif %}
+        </tr>
+        
+        {% endfor %}
+
+        <tr>
+            <td colspan = "3">TOTAL</td>
+            <td><font color="green">{{total}}</font></td>
+        </tr>
+    </tbody>
+</table>
+
+{% endblock %}

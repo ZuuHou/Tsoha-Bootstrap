@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Change your bet details</h1>
+<h2>Change your bet details</h2>
 
 <form method="post" action="{{base_path}}/ticket/{{ticket.id}}/edit">
     <div class="form-group">
@@ -12,15 +12,52 @@
         <label>Amount</label>
         <input type="text" name="amount" class="form-control" value="{{ticket.amount}}">
     </div>
+    
+    <div class="form-group">
+        <label>Total odds</label>
+        <input type="text" name="amount" class="form-control" value= "{{ticket.odds}}">
+    </div>
+
 
     <div class="form-group">
-        <label>Current State</label>
-        <input type="text" name="currentstate" class="form-control" value="{{ticket.currentstate}}">
+        <button type="submit" class="btn btn-primary">Edit</button>
+
+    </div>
+
+</form>
+<form style="padding: 20px 20px 20px 20px" method="post" action="{{base_path}}/ticket/{{ticket.id}}/delete">
+    <div class ="form-group">
+        <button type="submit" class="btn btn-danger btn-sm pull-right">Remove</button>
+        </div>
+</form>
+
+    <h2>Events:</h2>
+{% for bet in bets %}
+<hr style="height:5px" noshade>
+<form method="post" action="{{base_path}}/bet/{{bet.id}}/edit">
+    <div class="form-group">
+        <label>Sport</label>
+        <input type="text" name="sport" class="form-control" value="{{bet.sport}}">
     </div>
 
     <div class="form-group">
-        <label>Added</label>
-        <input type="text" name="added" class="form-control" value="{{ticket.added}}">
+        <label>Event</label>
+        <input type="text" name="event" class="form-control" value="{{bet.event}}">
+    </div>
+
+    <div class="form-group">
+        <label>Your Pick</label>
+        <input type="text" name="endresult" class="form-control" value="{{bet.endresult}}">
+    </div>
+
+    <div class="form-group">
+        <label>Odds</label>
+        <input type="text" name="odds" class="form-control" value="{{bet.odds}}">
+    </div>
+    
+        <div class="form-group">
+        <label>Event Date</label>
+        <input type="text" name="eventdate" class="form-control" value="{{bet.eventdate}}">
     </div>
 
     <div class="form-group">
@@ -29,10 +66,6 @@
     </div>
 
 </form>
-<form method="post" action="{{base_path}}/ticket/{{ticket.id}}/delete">
-    <div class ="form-group">
-        <button type="submit" class="btn btn-danger btn-sm pull-right">Remove</button>
-        </div>
-</form>
+{% endfor %}
 
 {% endblock %}

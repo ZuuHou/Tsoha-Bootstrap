@@ -13,6 +13,12 @@ class TicketController extends BaseController {
         $tickets = Ticket::show_open();
         View::make('index.html', array('tickets' => $tickets));
     }
+    
+    public static function show_history() {
+        self::check_logged_in();
+        $tickets = Ticket::all();
+        View::make('bethistory.html', array('tickets' => $tickets));
+    }
 
     public static function show($id) {
         self::check_logged_in();
@@ -38,13 +44,14 @@ class TicketController extends BaseController {
 
         $ticket->save();
 
-        Redirect::to('/ticket/' . $ticket->id, array('message' => 'You have succesfully added a new bet!'));
+        Redirect::to('/' . $ticket->id, array('message' => 'You have succesfully added a new bet!'));
     }
 
     public static function edit($id) {
         self::check_logged_in();
         $ticket = Ticket::find($id);
-        View::make('ticket/edit.html', array('ticket' => $ticket));
+        $bets = Bet::findAllFromTicket($id);
+        View::make('ticket/edit.html', array('ticket' => $ticket, 'bets' => $bets));
     }
 
     public static function update($id) {
