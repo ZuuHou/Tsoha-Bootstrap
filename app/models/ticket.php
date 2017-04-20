@@ -6,7 +6,7 @@ class Ticket extends BaseModel {
 
     public function __construct($attributes) {
         parent::__construct($attributes);
-        $this->validators = array('validate_site', 'validate_amount');
+        $this->validators = array();
     }
 
     public function all() {
@@ -74,15 +74,13 @@ class Ticket extends BaseModel {
         $query->execute(array('gbuser_id' => $this->gbuser_id, 'site' => $this->site, 'amount' => $this->amount, 'added' => $this->added));
         $row = $query->fetch();
         $this->id = $row['id'];
-        $this->$this->calculateTotalOdds();
     }
 
     public static function update($id) {
-        $query = DB::connection()->prepare('UPDATE Ticket SET site = :site, amount = :amount, added = :added WHERE id = :id');
-        $query->execute(array('id' => $id, 'site' => $this->site, 'amount' => $this->amount, 'added' => $this->added));
+        $query = DB::connection()->prepare('UPDATE Ticket SET site = :site, amount = :amount WHERE id = :id');
+        $query->execute(array('id' => $id, 'site' => $this->site, 'amount' => $this->amount));
         $row = $query->fetch();
         $this->id = $id;
-        $this->odds = $this->calculateTotalOdds();
     }
 
     public static function destroy($id) {

@@ -61,8 +61,7 @@ class TicketController extends BaseController {
         $attributes = array(
             'id' => $id,
             'site' => $params['site'],
-            'amount' => $params['amount'],
-            'added' => $params['added']
+            'amount' => $params['amount']
         );
 
         $ticket = new Ticket($attributes);
