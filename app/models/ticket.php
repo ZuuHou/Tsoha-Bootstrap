@@ -15,7 +15,7 @@ class Ticket extends BaseModel {
         $rows = $query->fetchAll();
         $tickets = array();
 
-        foreach ($rows as $row) {
+        foreach ($rows as $row) { 
             $ticket = new Ticket(array(
                 'id' => $row['id'],
                 'gbuser_id' => $row['gbuser_id'],
@@ -30,7 +30,7 @@ class Ticket extends BaseModel {
         return $tickets;
     }
 
-    public static function show_open() {
+    public function show_open() {
         $query = DB::connection()->prepare('SELECT Ticket.id, Ticket.site, Ticket.amount, Ticket.added FROM Ticket INNER JOIN Betticket ON Betticket.ticket_id = Ticket.id INNER JOIN Bet ON Bet.id = Betticket.bet_id WHERE Bet.currentstate = 0 AND Ticket.gbuser_id = :gbuser_id');
         $query->execute(array('gbuser_id' => $_SESSION['gbuser']));
         $rows = $query->fetchAll();
@@ -49,7 +49,7 @@ class Ticket extends BaseModel {
         return $tickets;
     }
 
-    public static function find($id) {
+    public function find($id) {
         $query = DB::connection()->prepare('SELECT * FROM Ticket WHERE id = :id LIMIT 1');
         $query->execute(array('id' => $id));
         $row = $query->fetch();
@@ -69,21 +69,20 @@ class Ticket extends BaseModel {
         return null;
     }
 
-    public static function save() {
+    public function save() {
         $query = DB::connection()->prepare('INSERT INTO Ticket (gbuser_id, site, amount, added) VALUES (:gbuser_id, :site, :amount, :added) RETURNING id');
         $query->execute(array('gbuser_id' => $this->gbuser_id, 'site' => $this->site, 'amount' => $this->amount, 'added' => $this->added));
         $row = $query->fetch();
         $this->id = $row['id'];
     }
 
-    public static function update($id) {
+    public function update($id) {
         $query = DB::connection()->prepare('UPDATE Ticket SET site = :site, amount = :amount WHERE id = :id');
         $query->execute(array('id' => $id, 'site' => $this->site, 'amount' => $this->amount));
-        $row = $query->fetch();
         $this->id = $id;
     }
 
-    public static function destroy($id) {
+    public function destroy($id) {
         $query = DB::connection()->prepare('DELETE FROM Ticket WHERE id = :id');
         $query->execute(array('id' => $id));
     }

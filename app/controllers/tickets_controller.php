@@ -41,10 +41,12 @@ class TicketController extends BaseController {
             'amount' => $params['amount'],
             'added' => $params['added']
         ));
+        
+        Kint::dump($ticket);
 
         $ticket->save();
 
-        Redirect::to('/' . $ticket->id, array('message' => 'You have succesfully added a new bet!'));
+        Redirect::to('/', array('message' => 'You have succesfully added a new bet!'));
     }
 
     public static function edit($id) {
