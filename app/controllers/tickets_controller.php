@@ -41,8 +41,6 @@ class TicketController extends BaseController {
             'amount' => $params['amount'],
             'added' => $params['added']
         ));
-        
-        Kint::dump($ticket);
 
         $ticket->save();
 
