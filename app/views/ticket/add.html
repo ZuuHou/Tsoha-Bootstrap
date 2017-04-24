@@ -1,28 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
 <div style="border: 10px solid green;padding: 20px;margin: 20px">
-    <font size="6">Your ticket is empty... add an event.</font>
+
+    Site: {{ticket.site}}
+    Amount {{ticket.amount}}
+    
+    {% for bet in bets %}
+    {{bet.odds}}
+    {% endfor %}
 </div>
 
-<form method="post" action="{{base_path}}/ticket/new">
-
-    <h3>Enter your ticket details:</h3>
     <div class="form-group">
-        <label>Site</label>
-        <input type="text" name="site" class="form-control">
+        <a class="btn btn-success btn-lg" href="{{base_path}}">Confirm Bet</a>
     </div>
 
-    <div class="form-group">
-        <label>Amount</label>
-        <input type="text" name="amount" class="form-control">
-    </div>
-
-    <div class="form-group">
-        <label>Added</label>
-        <input type="text" name="added" class="form-control">
-    </div>
-
-    <h3>Enter event details:</h3>
+<form method="post" action="{{base_path}}/ticket/{{ticket.id}}/add">
+    
+    <h3>Enter another event:</h3>
 
     <div class="form-group">
         <label>Sport type</label>

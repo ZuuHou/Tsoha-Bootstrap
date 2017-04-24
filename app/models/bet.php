@@ -5,10 +5,14 @@ class Bet extends BaseModel {
     public $id, $sport, $event, $endresult, $odds, $currentstate, $eventdate;
 
     public function save() {
-        $query = DB::connection()->prepare('INSERT INTO Bet (sport, event, endresult, odds, currentstate, eventdate) VALUES (:sport, :event, :endresult, :odds, :currenstate, :eventdate) RETURNING id');
-        $query->execute(array('sport' => $this->sport, 'event' => $this->event, 'endresult' => $this->endresult, 'odds' => $this->odds, 'currentstate' => $this->currentstate, 'eventdate' => $this->eventdate));
+        $query = DB::connection()->prepare('INSERT INTO Bet (sport, event, endresult, odds, eventdate) VALUES (:sport, :event, :endresult, :odds, :eventdate) RETURNING id');
+        $query->execute(array('sport' => $this->sport, 'event' => $this->event, 
+            'endresult' => $this->endresult, 
+            'odds' => $this->odds, 
+            'eventdate' => $this->eventdate));
         $row = $query->fetch();
         $this->id = $row['id'];
+        return $this->id;
     }
 
     public function update($id) {

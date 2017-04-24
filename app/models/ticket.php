@@ -15,7 +15,7 @@ class Ticket extends BaseModel {
         $rows = $query->fetchAll();
         $tickets = array();
 
-        foreach ($rows as $row) { 
+        foreach ($rows as $row) {
             $ticket = new Ticket(array(
                 'id' => $row['id'],
                 'gbuser_id' => $row['gbuser_id'],
@@ -31,7 +31,7 @@ class Ticket extends BaseModel {
     }
 
     public function show_open() {
-        $query = DB::connection()->prepare('SELECT Ticket.id, Ticket.site, Ticket.amount, Ticket.added FROM Ticket INNER JOIN Betticket ON Betticket.ticket_id = Ticket.id INNER JOIN Bet ON Bet.id = Betticket.bet_id WHERE Bet.currentstate = 0 AND Ticket.gbuser_id = :gbuser_id');
+        $query = DB::connection()->prepare('SELECT DISTINCT Ticket.id, Ticket.site, Ticket.amount, Ticket.added FROM Ticket INNER JOIN Betticket ON Betticket.ticket_id = Ticket.id INNER JOIN Bet ON Bet.id = Betticket.bet_id WHERE Bet.currentstate = 0 AND Ticket.gbuser_id = :gbuser_id');
         $query->execute(array('gbuser_id' => $_SESSION['gbuser']));
         $rows = $query->fetchAll();
         $tickets = array();
@@ -74,17 +74,22 @@ class Ticket extends BaseModel {
         $query->execute(array('gbuser_id' => $this->gbuser_id, 'site' => $this->site, 'amount' => $this->amount, 'added' => $this->added));
         $row = $query->fetch();
         $this->id = $row['id'];
+        return $this->id;
     }
 
-    public function update($id) {
+    public function update() {
         $query = DB::connection()->prepare('UPDATE Ticket SET site = :site, amount = :amount WHERE id = :id');
-        $query->execute(array('id' => $id, 'site' => $this->site, 'amount' => $this->amount));
-        $this->id = $id;
+        $query->execute(array('id' => $this->id, 'site' => $this->site, 'amount' => $this->amount));
     }
 
     public function destroy($id) {
         $query = DB::connection()->prepare('DELETE FROM Ticket WHERE id = :id');
         $query->execute(array('id' => $id));
+    }
+
+    public function add_bet($id) {
+        $query = DB::connection()->prepare('INSERT INTO BetTicket (ticket_id, bet_id) VALUES (:ticket_id, :bet_id)');
+        $query->execute(array('ticket_id' => $this->id, 'bet_id' => $id));
     }
 
     public function calculateTotalOdds() {
@@ -119,7 +124,7 @@ class Ticket extends BaseModel {
         } else {
             $this->result = $this->amount * $this->odds;
         }
-    }      
+    }
 
     public static function validate_site() {
         $errors = array();

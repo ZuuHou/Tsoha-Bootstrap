@@ -30,9 +30,19 @@ $routes->get('/ticket/new', function() {
     TicketController::create();
 });
 
-$routes->post('/ticket', function() {
+
+
+$routes->get('/ticket/:id/add', function($id) {
+    TicketController::show_creation($id);
+});
+
+$routes->post('/ticket/:id/add', function($id) {
+    TicketController::add($id);
+});
+
+$routes->post('/ticket/new', function() {
     TicketController::store();
-    BetController::store();
+    
 });
 
 $routes->get('/ticket/:id', function($id) {

@@ -16,7 +16,7 @@ class BetController extends BaseController {
 
         $bet->save();
 
-        Redirect::to('/ticket/' . $ticket->id, array('message' => 'You have succesfully added a new bet!'));
+ //       Redirect::to('/ticket/' . $ticket->id, array('message' => 'You have succesfully added a new bet!'));
     }
 
     public static function edit($id) {

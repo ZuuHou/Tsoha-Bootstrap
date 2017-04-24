@@ -13,7 +13,7 @@ class TicketController extends BaseController {
         $tickets = Ticket::show_open();
         View::make('index.html', array('tickets' => $tickets));
     }
-    
+
     public static function show_history() {
         self::check_logged_in();
         $tickets = Ticket::all();
@@ -31,7 +31,14 @@ class TicketController extends BaseController {
         View::make('ticket/new.html');
     }
 
-    public static function store() {
+    public static function show_creation($id) {
+        self::check_logged_in();
+        $ticket = Ticket::find($id);
+        $bets = Bet::findAllFromTicket($id);
+        View::make('ticket/add.html', array('ticket' => $ticket, 'bets' => $bets));
+    }
+
+    public function store() {
         self::check_logged_in();
         $params = $_POST;
 
@@ -42,9 +49,37 @@ class TicketController extends BaseController {
             'added' => $params['added']
         ));
 
-        $ticket->save();
+        $id = $ticket->save();
 
-        Redirect::to('/', array('message' => 'You have succesfully added a new bet!'));
+        $bet = new Bet(array(
+            'sport' => $params['sport'],
+            'event' => $params['event'],
+            'endresult' => $params['endresult'],
+            'odds' => $params['odds'],
+            'eventdate' => $params['eventdate']
+        ));
+
+        $bet_id = $bet->save();
+        $ticket->add_bet($bet_id);
+
+        Redirect::to("/ticket/$id/add", array('message' => 'You have succesfully added an event. Now you can add another one or confirm the bet.', 'ticket' => $ticket));
+    }
+
+    public function add($id) {
+        self::check_logged_in();
+        $params = $_POST;
+        $ticket = Ticket::find($id);
+        $bet = new Bet(array(
+            'sport' => $params['sport'],
+            'event' => $params['event'],
+            'endresult' => $params['endresult'],
+            'odds' => $params['odds'],
+            'eventdate' => $params['eventdate']
+        ));
+
+        $bet_id = $bet->save();
+        $ticket->add_bet($bet_id);
+        Redirect::to("/ticket/$id/add", array('message' => 'You have succesfully added an event. Now you can add another one or confirm the bet.', 'ticket' => $ticket));
     }
 
     public static function edit($id) {
@@ -70,12 +105,11 @@ class TicketController extends BaseController {
         //   if(count($errors) > 0){
         //   View::make('ticket/edit.html', array('errors' => $errors, 'attributes' => $attributes));
         // }else{
-        $ticket->update($id);
+        $ticket->update();
 
         Redirect::to('/', array('message' => 'Your bet has been updated!'));
     }
 
-    // Pelin poistaminen
     public static function destroy($id) {
         self::check_logged_in();
         $ticket = new Ticket(array('id' => $id));
