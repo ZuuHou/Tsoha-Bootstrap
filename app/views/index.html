@@ -15,23 +15,24 @@
             <th>Site</th>
             <th>Added</th>
             <th>Amount</th>
-            <th>Current State</th>
+            <th>Odds</th>
+            <th>Declare/Close Events</th>
             <th></th>
         </tr>
     </thead>
 
     <tbody>
-        
-      {% for ticket in tickets %}
+
+        {% for ticket in tickets %}
         <tr>
-          <td>{{ticket.site}}</td>
-          <td>{{ticket.added}}</td>
-          <td>{{ticket.amount}}</td>
-          <td>Open</td>
-          <td><a class="btn btn-default btn-sm" href="{{base_path}}/ticket/{{ticket.id}}/edit">Details</a>
-          </td>
+            <td>{{ticket.site}}</td>
+            <td>{{ticket.added}}</td>
+            <td>{{ticket.amount}}</td>
+            <td>{{ticket.odds}}</td>
+            <td><a class="btn btn-default btn-sm" href="{{base_path}}/ticket/{{ticket.id}}/declare">Click</a>
+            </td>
         </tr>
-      {% endfor %}
+        {% endfor %}
     </tbody>
-  </table>
+</table>
 {% endblock %}

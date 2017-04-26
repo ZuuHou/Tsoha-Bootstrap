@@ -57,6 +57,14 @@ $routes->post('/ticket/:id/edit', function($id) {
     TicketController::update($id);
 });
 
+$routes->get('/ticket/:id/declare', function($id) {
+    TicketController::declaration($id);
+});
+
+$routes->post('/ticket/:id/declare', function($id) {
+    BetController::declaration($id);
+});
+
 $routes->post('/ticket/:id/delete', function($id) {
     TicketController::destroy($id);
 });
@@ -71,7 +79,7 @@ $routes->post('/bet/:id/edit', function($id) {
     BetController::update($id);
 });
 
-$routes->post('/bet/:id/edit', function($id) {
+$routes->post('/bet/:id/delete', function($id) {
     BetController::destroy($id);
 });
 

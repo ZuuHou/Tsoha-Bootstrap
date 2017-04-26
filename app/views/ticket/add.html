@@ -1,13 +1,39 @@
 {% extends "base.html" %}
 {% block content %}
 <div style="border: 10px solid green;padding: 20px;margin: 20px">
+    <font color="green" size ="6">Ticket Details:</font>
+    <table style="width:100%; border:1px solid black; padding: 100px;">
+  <tr>
+    <th>Site</th>
+    <th>Amount</th> 
+    <th>Odds</th>
+  </tr>
+  <tr>
+    <td>{{ticket.site}}</td>
+    <td>{{ticket.amount}}</td> 
+    <td>{{ticket.odds}}</td>
+  </tr>
+</table>
+    <font color="green" size ="4">Events on ticket:</font>
+        <table style="width:100%; padding: 100px; border-collapse: collapse">
+  <tr>
+    <th>Sport</th>
+    <th>Event</th> 
+    <th>Your pick</th>
+    <th>Odds</th>
+    <th>Event date</th>
+  </tr>
+  {% for bet in bets %}
+  <tr>
+    <td>{{bet.sport}}</td>
+    <td>{{bet.event}}</td> 
+    <td>{{bet.endresult}}</td>
+    <td>{{bet.odds}}</td>
+    <td>{{bet.eventdate}}</td>
+  </tr>
+  {% endfor %}
+</table>
 
-    Site: {{ticket.site}}
-    Amount {{ticket.amount}}
-    
-    {% for bet in bets %}
-    {{bet.odds}}
-    {% endfor %}
 </div>
 
     <div class="form-group">

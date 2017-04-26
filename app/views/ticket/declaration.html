@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Change your bet details</h2>
+
+<form method="post" action="{{base_path}}/ticket/{{ticket.id}}/edit">
+    <div class="form-group">
+        <label>Site</label>
+        <input type="text" name="site" class="form-control" value="{{ticket.site}}">
+    </div>
+
+    <div class="form-group">
+        <label>Amount</label>
+        <input type="text" name="amount" class="form-control" value="{{ticket.amount}}">
+    </div>
+
+    <div class="form-group">
+        <label>Total odds</label>
+        <input type="text" name="totalodds" class="form-control" value= "{{ticket.odds}}">
+    </div>
+
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Edit</button>
+
+    </div>
+
+</form>
+<form style="padding: 20px 20px 20px 20px" method="post" action="{{base_path}}/ticket/{{ticket.id}}/delete">
+    <div class ="form-group">
+        <button type="submit" class="btn btn-danger btn-sm pull-right">Remove</button>
+    </div>
+</form>
+
+<h2>Events:</h2>
+{% for bet in bets %}
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Event</th>
+            <th>Your Pick</th>
+            <th>Current State</th>
+            <th>Declare Won/Lost</th>
+            <th>Event Date</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>{{bet.event}}</td>
+            <td>{{bet.endresult}}</td>
+            {% if bet.currentstate == 1 %}
+            <td><font color="green">Won</font></td>
+            {% endif %}
+            {% if bet.currentstate == 2 %}
+            <td><font color="red">Lost</font></td>
+            {% endif %}
+            {% if bet.currentstate == 0 %}
+            <td><font color="blue">Open</font></td>
+            {% endif %}
+            <td>
+                <form action="{{base_path}}/ticket/{{bet.id}}/declare" method="post">
+                    <button name="declaration" class="btn-success btn-sm" type="submit" value="1">Won</button>
+                    <button name="declaration" class="btn-danger btn-sm" type="submit" value="2">Lost</button>
+                </form>
+            </td>
+            <td>{{bet.eventdate}}
+        </tr>
+    </tbody>
+</table>
+
+</form>
+{% endfor %}
+
+{% endblock %}

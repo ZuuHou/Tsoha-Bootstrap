@@ -24,6 +24,23 @@ class BetController extends BaseController {
         $bet = Bet::find($id);
         View::make('bet/edit.html', array('bet' => $bet));
     }
+    
+    public static function declaration($id) {
+        self::check_logged_in();
+        $params = $_POST;
+
+        $attributes = array(
+            'id' => $id,
+            'currentstate' => $params['declaration']
+        );
+
+        $bet = new Bet($attributes);
+   //     $errors = $bet->errors();
+
+        $bet->declaration($id);
+
+        Redirect::to('/', array('message' => 'Your bet has been updated!'));
+    }
 
     public static function update($id) {
         self::check_logged_in();
@@ -39,11 +56,21 @@ class BetController extends BaseController {
         );
 
         $bet = new Bet($attributes);
-        $errors = $bet->errors();
+  //      $errors = $bet->errors();
 
         $bet->update($id);
 
         Redirect::to('/', array('message' => 'Your bet has been updated!'));
     }
+    
+        public static function destroy($id) {
+        self::check_logged_in();
+        $bet = new Bet(array('id' => $id));
+        $ticket_id = Bet::find_ticket_id($id);
+        $bet->destroy($id);
+        Ticket::check_if_no_events($ticket_id);
+
+        Redirect::to('/bethistory', array('message' => 'Your bet has been removed!'));
+    }  
 
 }

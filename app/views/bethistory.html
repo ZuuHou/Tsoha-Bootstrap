@@ -9,6 +9,7 @@
             <th>Amount</th>
             <th>Odds</th>
             <th>Result</th>
+            <th>Edit Ticket</th>
         </tr>
     </thead>
 
@@ -21,7 +22,7 @@
             <td>{{ticket.amount}}</td>
             <td>{{ticket.odds}}</td>
             {% if ticket.result > 0 %}
-            <td><font color="green">{{ticket.result}}</font></td>
+            <td><font color="green">+{{ticket.result}}</font></td>
             {% endif %}
             {% if ticket.result < 0 %}
             <td><font color="red">{{ticket.result}}</font></td>
@@ -29,13 +30,18 @@
             {% if ticket.result == 0 %}
             <td>Open</td>
             {% endif %}
+            <td><a class="btn btn-default btn-sm" href="{{base_path}}/ticket/{{ticket.id}}/edit">Click</a></td>
         </tr>
         
         {% endfor %}
 
         <tr>
-            <td colspan = "3">TOTAL</td>
-            <td><font color="green">{{total}}</font></td>
+            <td colspan = "3">TOTAL RESULT</td>
+            {% if total < 0 %}
+            <td><font color="red">{{total}}</font></td>
+            {% else %}
+            <td><font color="green">+{{total}}</font></td>
+            {% endif %}
         </tr>
     </tbody>
 </table>

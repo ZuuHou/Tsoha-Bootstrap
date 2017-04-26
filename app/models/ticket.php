@@ -23,6 +23,7 @@ class Ticket extends BaseModel {
                 'amount' => $row['amount'],
                 'added' => $row['added']
             ));
+            $ticket->amount = $ticket->format_decimals($ticket->amount);
             $ticket->calculateTotalOdds();
             $ticket->calculate_result();
             $tickets[] = $ticket;
@@ -43,6 +44,7 @@ class Ticket extends BaseModel {
                 'amount' => $row['amount'],
                 'added' => $row['added']
             ));
+            $ticket->amount = $ticket->format_decimals($ticket->amount);
             $ticket->calculateTotalOdds();
             $tickets[] = $ticket;
         }
@@ -62,6 +64,7 @@ class Ticket extends BaseModel {
                 'amount' => $row['amount'],
                 'added' => $row['added']
             ));
+            $ticket->amount = $ticket->format_decimals($ticket->amount);
             $ticket->calculateTotalOdds();
             return $ticket;
         }
@@ -83,13 +86,20 @@ class Ticket extends BaseModel {
     }
 
     public function destroy($id) {
+        $this->remove_from_betticket($id);
         $query = DB::connection()->prepare('DELETE FROM Ticket WHERE id = :id');
+        $query->execute(array('id' => $id));
+    }
+
+    public function remove_from_betticket($id) {
+        $query = DB::connection()->prepare('DELETE FROM BetTicket WHERE ticket_id = :id');
         $query->execute(array('id' => $id));
     }
 
     public function add_bet($id) {
         $query = DB::connection()->prepare('INSERT INTO BetTicket (ticket_id, bet_id) VALUES (:ticket_id, :bet_id)');
         $query->execute(array('ticket_id' => $this->id, 'bet_id' => $id));
+        $this->calculateTotalOdds();
     }
 
     public function calculateTotalOdds() {
@@ -103,11 +113,11 @@ class Ticket extends BaseModel {
                 $odds = $odds * $row['odds']
             ));
         }
-        $this->odds = $odds;
+        $this->odds = $this->format_decimals($odds);
     }
 
     public function calculate_result() {
-        $bets = Bet::findAllFromTicket($this->id);
+        $bets = Bet::find_all_from_ticket($this->id);
         $lost = false;
         $open = false;
         foreach ($bets as $bet) {
@@ -118,12 +128,20 @@ class Ticket extends BaseModel {
             }
         }
         if ($lost) {
-            $this->result = $this->amount - 2 * $this->amount;
+            $this->result = $this->format_decimals($this->amount - 2 * $this->amount);
         } else if ($open) {
-            $this->result = 0;
+            $this->result = 0.00;
         } else {
-            $this->result = $this->amount * $this->odds;
+            $this->result = $this->format_decimals($this->amount * $this->odds - $this->amount);
         }
+    }
+
+    public function calculateTotalResult($tickets) {
+        $total = 0;
+        foreach ($tickets as $ticket) {
+            $total = $ticket->format_decimals($total + $ticket->result);
+        }
+        return $total;
     }
 
     public static function validate_site() {
@@ -145,6 +163,19 @@ class Ticket extends BaseModel {
         }
 
         return $errors;
+    }
+
+    public static function format_decimals($number) {
+        return number_format((float) $number, 2, '.', '');
+    }
+
+    public static function check_if_no_events($id) {
+        $query = DB::connection()->prepare('SELECT count(BetTicket.bet_id) FROM Ticket INNER JOIN Betticket ON Betticket.ticket_id = Ticket.id  WHERE Ticket.gbuser_id = :gbuser_id AND Ticket.id = :id');
+        $query->execute(array('gbuser_id' => $_SESSION['gbuser'], 'id' => $id));
+        $events = $query->fetch();
+        if ($events < 1) {
+            $this->find($id)->destroy($id);
+        }
     }
 
 }

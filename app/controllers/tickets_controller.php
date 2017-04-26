@@ -17,7 +17,9 @@ class TicketController extends BaseController {
     public static function show_history() {
         self::check_logged_in();
         $tickets = Ticket::all();
-        View::make('bethistory.html', array('tickets' => $tickets));
+        $total = Ticket::calculateTotalResult($tickets);
+        $total = number_format((float)$total, 2, '.', '');
+        View::make('bethistory.html', array('tickets' => $tickets, 'total' => $total));
     }
 
     public static function show($id) {
@@ -34,7 +36,7 @@ class TicketController extends BaseController {
     public static function show_creation($id) {
         self::check_logged_in();
         $ticket = Ticket::find($id);
-        $bets = Bet::findAllFromTicket($id);
+        $bets = Bet::find_all_from_ticket($id);
         View::make('ticket/add.html', array('ticket' => $ticket, 'bets' => $bets));
     }
 
@@ -85,8 +87,15 @@ class TicketController extends BaseController {
     public static function edit($id) {
         self::check_logged_in();
         $ticket = Ticket::find($id);
-        $bets = Bet::findAllFromTicket($id);
-        View::make('ticket/edit.html', array('ticket' => $ticket, 'bets' => $bets));
+        $bets = Bet::find_all_from_ticket($id);
+        View::make('/ticket/edit.html', array('ticket' => $ticket, 'bets' => $bets));
+    }
+    
+        public static function declaration($id) {
+        self::check_logged_in();
+        $ticket = Ticket::find($id);
+        $bets = Bet::find_all_from_ticket($id);
+        View::make('/ticket/declaration.html', array('ticket' => $ticket, 'bets' => $bets));
     }
 
     public static function update($id) {
@@ -114,8 +123,15 @@ class TicketController extends BaseController {
         self::check_logged_in();
         $ticket = new Ticket(array('id' => $id));
         $ticket->destroy($id);
-
+        $bets = Bet::findAllFromTicket($id);
+        foreach ($bets as $bet) {
+            $bet->destroy();
+        }
         Redirect::to('/', array('message' => 'Your bet has been removed!'));
+    }  
+    
+    public static function format_decimals($number) {
+        return number_format((float)$number, 2, '.', '');
     }
 
 }
