@@ -40,19 +40,17 @@ class UserController extends BaseController {
     public function update_balance() {
         self::check_logged_in();
         $params = $_POST;
-        if($params['deposit'] == null) {
-            $gbuser = new Gbuser(array(
-                'username' => $_SESSION['gbuser'],
-                'balance' => user_logged_in.balance - $params['withdraw']
-            ));
+        $gbuser = Gbuser::find($_SESSION['gbuser']);
+        if($params['deposit'] == 0) {
+            $balance = $gbuser->balance - $params['withdraw'];
+            $gbuser->update_balance($balance);
+            Redirect::to('/', array('message' => 'You have succesfully made a withdrawal!!'));
         }
-        if($params['withdraw'] == null) {
-            $gbuser = new Gbuser(array(
-                'username' => $_SESSION['gbuser'],
-                'balance' => user_logged_in.balance + $params['deposit']
-            ));
+        if($params['withdraw'] == 0) {
+            $balance = $gbuser->balance + $params['deposit'];
+            $gbuser->update_balance($balance);
+            Redirect::to('/', array('message' => 'You have succesfully made a deposit!!'));
         }
-        $gbuser->update_balance();
     }
 
     public static function store() {

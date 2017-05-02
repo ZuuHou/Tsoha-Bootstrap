@@ -169,12 +169,12 @@ class Ticket extends BaseModel {
         return number_format((float) $number, 2, '.', '');
     }
 
-    public static function check_if_no_events($id) {
-        $query = DB::connection()->prepare('SELECT count(BetTicket.bet_id) FROM Ticket INNER JOIN Betticket ON Betticket.ticket_id = Ticket.id  WHERE Ticket.gbuser_id = :gbuser_id AND Ticket.id = :id');
-        $query->execute(array('gbuser_id' => $_SESSION['gbuser'], 'id' => $id));
-        $events = $query->fetch();
-        if ($events < 1) {
-            $this->find($id)->destroy($id);
+    public function check_if_no_events() {
+        $query = DB::connection()->prepare('SELECT COUNT(BetTicket.bet_id) FROM Ticket INNER JOIN Betticket ON Betticket.ticket_id = Ticket.id  WHERE Ticket.gbuser_id = :gbuser_id AND Ticket.id = :id');
+        $query->execute(array('gbuser_id' => $_SESSION['gbuser'], 'id' => $this->id));
+        $row = $query->fetch();
+        if ($row[0] < 1) {
+            $this->destroy($this->id);
         }
     }
 

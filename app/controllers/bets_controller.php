@@ -68,7 +68,8 @@ class BetController extends BaseController {
         $bet = new Bet(array('id' => $id));
         $ticket_id = Bet::find_ticket_id($id);
         $bet->destroy($id);
-        Ticket::check_if_no_events($ticket_id);
+        $ticket = Ticket::find($ticket_id);
+        $ticket->check_if_no_events();
 
         Redirect::to('/bethistory', array('message' => 'Your bet has been removed!'));
     }  

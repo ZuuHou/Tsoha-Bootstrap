@@ -37,9 +37,9 @@ class Gbuser extends BaseModel {
     
     
 
-    public function update_balance() {
+    public function update_balance($balance) {
         $query = DB::connection()->prepare('UPDATE Gbuser SET balance = :balance WHERE id = :id');
-        $query->execute(array('id' => $this->id, 'balance' => $this->balance));
+        $query->execute(array('id' => $this->id, 'balance' => $balance));
     }
 
     public function validate_username() {
