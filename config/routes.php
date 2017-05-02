@@ -4,21 +4,26 @@ $routes->get('/', function() {
     TicketController::show_open();
 });
 
-$routes->get('/hiekkalaatikko', function() {
-    HelloWorldController::sandbox();
-});
-
 $routes->get('/bethistory', function() {
     TicketController::show_history();
 });
 
-$routes->get('/bet', function() {
-    HelloWorldController::bet();
+$routes->get('/gbuser/deposit', function() {
+    UserController::deposit();
 });
 
-$routes->get('/balance', function() {
-    HelloWorldController::balance();
+$routes->post('/gbuser/deposit', function() {
+    UserController::update_balance();
 });
+
+$routes->get('/gbuser/withdraw', function() {
+    UserController::withdraw();
+});
+
+$routes->post('/gbuser/withdraw', function() {
+    UserController::update_balance();
+});
+
 
 
 
@@ -29,8 +34,6 @@ $routes->get('/ticket', function() {
 $routes->get('/ticket/new', function() {
     TicketController::create();
 });
-
-
 
 $routes->get('/ticket/:id/add', function($id) {
     TicketController::show_creation($id);

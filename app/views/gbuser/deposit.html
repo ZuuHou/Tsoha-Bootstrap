@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+
+  <h3>Deposit</h3>
+
+   <form method="post" action="{{base_path}}/gbuser/deposit">
+    <div class="form-group">
+      <label>Amount</label>
+      <input type="text" class="form-control" name="deposit">
+    </div>
+
+    <button type="submit" class="btn btn-success">Confirm Deposit</button>
+    <button><a class="btn btn-danger" href="{{base_path}}">Cancel</a></button>
+  </form>
+{% endblock %}

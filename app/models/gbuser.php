@@ -29,14 +29,17 @@ class Gbuser extends BaseModel {
     }
 
     public function save() {
-        // Lisätään RETURNING id tietokantakyselymme loppuun, niin saamme lisätyn rivin id-sarakkeen arvon
         $query = DB::connection()->prepare('INSERT INTO Gbuser (username, password, balance) VALUES (:username, :password, :balance) RETURNING id');
-        // Muistathan, että olion attribuuttiin pääse syntaksilla $this->attribuutin_nimi
         $query->execute(array('username' => $this->username, 'password' => $this->password, 'balance' => $this->balance));
-        // Haetaan kyselyn tuottama rivi, joka sisältää lisätyn rivin id-sarakkeen arvon
         $row = $query->fetch();
-        // Asetetaan lisätyn rivin id-sarakkeen arvo oliomme id-attribuutin arvoksi
         $this->id = $row['id'];
+    }
+    
+    
+
+    public function update_balance() {
+        $query = DB::connection()->prepare('UPDATE Gbuser SET balance = :balance WHERE id = :id');
+        $query->execute(array('id' => $this->id, 'balance' => $this->balance));
     }
 
     public function validate_username() {

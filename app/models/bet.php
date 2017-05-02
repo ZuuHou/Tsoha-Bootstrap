@@ -21,7 +21,7 @@ class Bet extends BaseModel {
         $this->id = $id;
     }
 
-    public function declaration($id) {
+    public function update_currentstate($id) {
         $query = DB::connection()->prepare('UPDATE Bet SET currentstate = :currentstate WHERE id = :id');
         $query->execute(array('currentstate' => $this->currentstate, 'id' => $id));
         $this->id = $id;

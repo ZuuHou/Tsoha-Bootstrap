@@ -37,7 +37,7 @@ class BetController extends BaseController {
         $bet = new Bet($attributes);
    //     $errors = $bet->errors();
 
-        $bet->declaration($id);
+        $bet->update_currentstate($id);
 
         Redirect::to('/', array('message' => 'Your bet has been updated!'));
     }

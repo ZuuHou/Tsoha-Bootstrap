@@ -28,6 +28,32 @@ class UserController extends BaseController {
     public static function create() {
         View::make('gbuser/newaccount.html');
     }
+    
+    public function deposit() {
+        View::make('gbuser/deposit.html');
+    }
+    
+    public function withdraw() {
+        View::make('gbuser/withdraw.html');
+    }
+    
+    public function update_balance() {
+        self::check_logged_in();
+        $params = $_POST;
+        if($params['deposit'] == null) {
+            $gbuser = new Gbuser(array(
+                'username' => $_SESSION['gbuser'],
+                'balance' => user_logged_in.balance - $params['withdraw']
+            ));
+        }
+        if($params['withdraw'] == null) {
+            $gbuser = new Gbuser(array(
+                'username' => $_SESSION['gbuser'],
+                'balance' => user_logged_in.balance + $params['deposit']
+            ));
+        }
+        $gbuser->update_balance();
+    }
 
     public static function store() {
 

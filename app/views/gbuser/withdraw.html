@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+
+  <h3>Withdraw</h3>
+
+   <form method="post" action="{{base_path}}/gbuser/withdraw">
+    <div class="form-group">
+      <label>Amount</label>
+      <input type="text" class="form-control" name="withdraw">
+    </div>
+
+    <button type="submit" class="btn btn-success">Confirm Withdrawal</button>
+    <button><a class="btn btn-danger" href="{{base_path}}">Cancel</a></button>
+  </form>
+{% endblock %}
