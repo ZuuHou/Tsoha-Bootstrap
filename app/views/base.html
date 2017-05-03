@@ -64,8 +64,14 @@
 
         <div id="main-container">
             {{message}}
-            {{error}}
             
+            {% for error in errors %}
+            
+            {{error}}
+            <BR>
+            
+            {% endfor %}
+
             {% block content %}
 
             {% endblock %}

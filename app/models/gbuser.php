@@ -47,7 +47,7 @@ class Gbuser extends BaseModel {
         if ($this->username == '') {
             $errors[] = 'Username cannot be empty!';
         }
-        if (strlen($this->site) < 3) {
+        if (strlen($this->username) < 3) {
             $errors[] = 'Username should be atleast 3 characters long!';
         }
 
@@ -56,10 +56,10 @@ class Gbuser extends BaseModel {
 
     public function validate_password() {
         $errors = array();
-        if ($this->password == '' || $this->site == null) {
+        if ($this->password == '') {
             $errors[] = 'Password cannot be empty!';
         }
-        if (strlen($this->site) < 6) {
+        if (strlen($this->password) < 6) {
             $errors[] = 'Password should be atleast 6 characters long!';
         }
 

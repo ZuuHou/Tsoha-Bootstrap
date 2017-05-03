@@ -21,8 +21,7 @@ class BaseModel {
         $errors = array();
 
         foreach ($this->validators as $validator) {
-            $metodin_nimi = $validator;
-            $validator_errors = $this->{$metodin_nimi}();
+            $validator_errors = $this->{$validator}();
             $errors = array_merge($errors, $validator_errors);
         }
 
@@ -40,9 +39,11 @@ class BaseModel {
 
     public function validate_number($number) {
         $errors = array();
-        if (!is_numeric($number)) {
-            $errors[] = 'Your input is not a number!';
+        $regex = '/^\s*[+\-]?(?:\d+(?:\.\d*)?|\.\d+)\s*$/';
+        if (!preg_match($regex, $number)) {
+            $errors[] = 'Your input is not a valid number!';
         }
+        
 
         return $errors;
     }
