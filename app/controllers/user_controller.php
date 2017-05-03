@@ -64,7 +64,7 @@ class UserController extends BaseController {
         ));
         
         $errors = $gbuser->errors();
-        Kint::dump($errors);
+
         if(count($errors) != 0) {
             Redirect::to('/gbuser/newaccount', array('errors' => $errors));
         }

@@ -6,7 +6,7 @@ class Ticket extends BaseModel {
 
     public function __construct($attributes) {
         parent::__construct($attributes);
-        $this->validators = array();
+        $this->validators = array('validate_amount', 'validate_site');
     }
 
     public function all() {
@@ -144,22 +144,26 @@ class Ticket extends BaseModel {
         return $total;
     }
 
-    public static function validate_site() {
+    public function validate_site() {
         $errors = array();
         if ($this->site == '' || $this->site == null) {
-            $errors[] = 'Nimi ei saa olla tyhjä!';
+            $errors[] = 'Your site cannot be empty!';
         }
         if (strlen($this->site) < 3) {
-            $errors[] = 'Nimen pituuden tulee olla vähintään kolme merkkiä!';
+            $errors[] = 'Your site must be atleast 3 characters long!';
         }
 
         return $errors;
     }
 
-    public static function validate_amount() {
+    public function validate_amount() {
         $errors = array();
-        if (is_numeric($this->amount)) {
-            $errors[] = 'Numero plaaplaa';
+        if (!$this->validate_number($this->amount)) {
+            $errors[] = 'Your amount is not a valid number.';
+        }
+        
+        if($this->amount <= 0) {
+            $errors[] = 'Amount must be bigger than 0!';
         }
 
         return $errors;

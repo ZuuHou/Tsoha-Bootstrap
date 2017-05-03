@@ -40,12 +40,7 @@ class BaseModel {
     public function validate_number($number) {
         $errors = array();
         $regex = '/^\s*[+\-]?(?:\d+(?:\.\d*)?|\.\d+)\s*$/';
-        if (!preg_match($regex, $number)) {
-            $errors[] = 'Your input is not a valid number!';
-        }
-        
-
-        return $errors;
+        return (preg_match($regex, $number));
     }
 
 }

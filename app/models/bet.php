@@ -4,6 +4,11 @@ class Bet extends BaseModel {
 
     public $id, $sport, $event, $endresult, $odds, $currentstate, $eventdate;
 
+    public function __construct($attributes) {
+        parent::__construct($attributes);
+        $this->validators = array('validate_odds');
+    }
+
     public function save() {
         $query = DB::connection()->prepare('INSERT INTO Bet (sport, event, endresult, odds, eventdate) VALUES (:sport, :event, :endresult, :odds, :eventdate) RETURNING id');
         $query->execute(array('sport' => $this->sport, 'event' => $this->event,
@@ -65,6 +70,18 @@ class Bet extends BaseModel {
             ));
         }
         return $bets;
+    }
+
+    public function validate_odds() {
+        $errors = array();
+        if (!$this->validate_number($this->odds)) {
+            $errors[] = 'Your odds is not a valid number.';
+        }
+        if ($this->odds <= 1) {
+            $errors[] = 'Odds must be over 1.0!';
+        }
+
+        return $errors;
     }
 
 }

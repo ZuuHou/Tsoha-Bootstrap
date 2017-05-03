@@ -51,7 +51,7 @@ class TicketController extends BaseController {
             'added' => $params['added']
         ));
 
-        $id = $ticket->save();
+        $ticketerrors = $ticket->errors();
 
         $bet = new Bet(array(
             'sport' => $params['sport'],
@@ -60,11 +60,19 @@ class TicketController extends BaseController {
             'odds' => $params['odds'],
             'eventdate' => $params['eventdate']
         ));
+        
+        $errors = array_merge($ticketerrors, $bet->errors());
 
-        $bet_id = $bet->save();
-        $ticket->add_bet($bet_id);
+        if (count($errors) != 0) {
+            Redirect::to("/ticket/new", array('errors' => $errors));
+        } else {
 
-        Redirect::to("/ticket/$id/add", array('message' => 'You have succesfully added an event. Now you can add another one or confirm the bet.', 'ticket' => $ticket));
+            $id = $ticket->save();
+            $bet_id = $bet->save();
+            $ticket->add_bet($bet_id);
+
+            Redirect::to("/ticket/$id/add", array('message' => 'You have succesfully added an event. Now you can add another one or confirm the bet.', 'ticket' => $ticket));
+        }
     }
 
     public function add($id) {
