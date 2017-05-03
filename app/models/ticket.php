@@ -32,7 +32,7 @@ class Ticket extends BaseModel {
     }
 
     public function show_open() {
-        $query = DB::connection()->prepare('SELECT DISTINCT Ticket.id, Ticket.site, Ticket.amount, Ticket.added FROM Ticket INNER JOIN Betticket ON Betticket.ticket_id = Ticket.id INNER JOIN Bet ON Bet.id = Betticket.bet_id WHERE Bet.currentstate = 0 AND Ticket.gbuser_id = :gbuser_id');
+        $query = DB::connection()->prepare('SELECT DISTINCT Ticket.id, Ticket.site, Ticket.amount, Ticket.added FROM Ticket INNER JOIN Betticket ON Betticket.ticket_id = Ticket.id INNER JOIN Bet ON Bet.id = Betticket.bet_id WHERE Bet.currentstate = 0 AND Ticket.gbuser_id = :gbuser_id' );
         $query->execute(array('gbuser_id' => $_SESSION['gbuser']));
         $rows = $query->fetchAll();
         $tickets = array();
@@ -167,6 +167,17 @@ class Ticket extends BaseModel {
 
     public static function format_decimals($number) {
         return number_format((float) $number, 2, '.', '');
+    }
+    
+    public function check_if_open() {
+        $query = DB::connection()->prepare('SELECT COUNT(BetTicket.bet_id) FROM Ticket INNER JOIN Betticket ON Betticket.ticket_id = Ticket.id INNER JOIN Bet ON Bet.id = Betticket.bet_id WHERE Bet.currentstate = 0 AND Ticket.gbuser_id = :gbuser_id AND Ticket.id = :id');
+        $query->execute(array('gbuser_id' => $_SESSION['gbuser'], 'id' => $this->id));
+        $row = $query->fetch();
+        if ($row[0] < 1) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public function check_if_no_events() {

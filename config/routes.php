@@ -61,7 +61,7 @@ $routes->post('/ticket/:id/edit', function($id) {
 });
 
 $routes->get('/ticket/:id/declare', function($id) {
-    TicketController::declaration($id);
+    TicketController::update_currentstate($id);
 });
 
 $routes->post('/ticket/:id/declare', function($id) {

@@ -18,7 +18,7 @@ class TicketController extends BaseController {
         self::check_logged_in();
         $tickets = Ticket::all();
         $total = Ticket::calculateTotalResult($tickets);
-        $total = number_format((float)$total, 2, '.', '');
+        $total = number_format((float) $total, 2, '.', '');
         View::make('bethistory.html', array('tickets' => $tickets, 'total' => $total));
     }
 
@@ -90,8 +90,8 @@ class TicketController extends BaseController {
         $bets = Bet::find_all_from_ticket($id);
         View::make('/ticket/edit.html', array('ticket' => $ticket, 'bets' => $bets));
     }
-    
-        public static function declaration($id) {
+
+    public static function update_currentstate($id) {
         self::check_logged_in();
         $ticket = Ticket::find($id);
         $bets = Bet::find_all_from_ticket($id);
@@ -123,15 +123,15 @@ class TicketController extends BaseController {
         self::check_logged_in();
         $ticket = new Ticket(array('id' => $id));
         $ticket->destroy($id);
-        $bets = Bet::findAllFromTicket($id);
+        $bets = Bet::find_all_from_ticket($id);
         foreach ($bets as $bet) {
             $bet->destroy();
         }
-        Redirect::to('/', array('message' => 'Your bet has been removed!'));
-    }  
-    
+        Redirect::to('/', array('message' => 'Your ticket has been removed!'));
+    }
+
     public static function format_decimals($number) {
-        return number_format((float)$number, 2, '.', '');
+        return number_format((float) $number, 2, '.', '');
     }
 
 }

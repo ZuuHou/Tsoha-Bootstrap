@@ -16,7 +16,7 @@ class BetController extends BaseController {
 
         $bet->save();
 
- //       Redirect::to('/ticket/' . $ticket->id, array('message' => 'You have succesfully added a new bet!'));
+        //       Redirect::to('/ticket/' . $ticket->id, array('message' => 'You have succesfully added a new bet!'));
     }
 
     public static function edit($id) {
@@ -24,7 +24,7 @@ class BetController extends BaseController {
         $bet = Bet::find($id);
         View::make('bet/edit.html', array('bet' => $bet));
     }
-    
+
     public static function declaration($id) {
         self::check_logged_in();
         $params = $_POST;
@@ -35,9 +35,16 @@ class BetController extends BaseController {
         );
 
         $bet = new Bet($attributes);
-   //     $errors = $bet->errors();
 
         $bet->update_currentstate($id);
+
+        $ticket = Ticket::find(Bet::find_ticket_id($id));
+        if (!$ticket->check_if_open()) {
+            $ticket->calculate_result();
+            $gbuser = Gbuser::find($_SESSION['gbuser']);
+            $gbuser->update_balance($gbuser->balance + $ticket->result);
+            Redirect::to('/', array('message' => 'Your bet has been updated and your ticket has been closed! Your balance has been updated accordingly.'));
+        }
 
         Redirect::to('/', array('message' => 'Your bet has been updated!'));
     }
@@ -56,14 +63,14 @@ class BetController extends BaseController {
         );
 
         $bet = new Bet($attributes);
-  //      $errors = $bet->errors();
+        //      $errors = $bet->errors();
 
         $bet->update($id);
 
         Redirect::to('/', array('message' => 'Your bet has been updated!'));
     }
-    
-        public static function destroy($id) {
+
+    public static function destroy($id) {
         self::check_logged_in();
         $bet = new Bet(array('id' => $id));
         $ticket_id = Bet::find_ticket_id($id);
@@ -72,6 +79,6 @@ class BetController extends BaseController {
         $ticket->check_if_no_events();
 
         Redirect::to('/bethistory', array('message' => 'Your bet has been removed!'));
-    }  
+    }
 
 }
