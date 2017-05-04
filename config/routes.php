@@ -24,9 +24,6 @@ $routes->post('/gbuser/withdraw', function() {
     UserController::update_balance();
 });
 
-
-
-
 $routes->get('/ticket', function() {
     TicketController::index();
 });

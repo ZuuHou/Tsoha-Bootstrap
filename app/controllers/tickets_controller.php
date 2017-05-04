@@ -49,6 +49,10 @@ class TicketController extends BaseController {
             'site' => $params['site'],
             'amount' => $params['amount']
         ));
+        
+        if ($ticket->amount > self::get_user_logged_in()->balance) {
+            Redirect::to("/ticket/new", array('message' => 'Insufficient account balance!'));
+        }
 
         $ticketerrors = $ticket->errors();
 
