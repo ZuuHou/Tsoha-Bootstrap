@@ -3,9 +3,9 @@
 -- Gbuser-taulun testidata
 INSERT INTO Gbuser (username, password, balance) VALUES ('devnull', 'devnull', '421.0');
 -- Ticket taulun testidata
-INSERT INTO Ticket (gbuser_id, site, amount, added) VALUES ('1', 'Unibet', '10.00', '2016-11-11');
-INSERT INTO Ticket (gbuser_id, site, amount, added) VALUES ('1', 'Nordicbet', '20.00', '2017-02-08');
-INSERT INTO Ticket (gbuser_id, site, amount, added) VALUES ('1', 'Nordicbet', '20.00', '2017-02-08');
+INSERT INTO Ticket (gbuser_id, site, amount) VALUES ('1', 'Unibet', '10.00');
+INSERT INTO Ticket (gbuser_id, site, amount) VALUES ('1', 'Nordicbet', '20.00');
+INSERT INTO Ticket (gbuser_id, site, amount) VALUES ('1', 'Nordicbet', '20.00');
 
 -- Bet taulun testidata
 INSERT INTO Bet (sport, event, endresult, odds, eventdate) VALUES ('NHL', 'New York - Washington', 'New York', '3.00', '2017-02-08');

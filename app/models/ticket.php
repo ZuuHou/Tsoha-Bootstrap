@@ -2,7 +2,7 @@
 
 class Ticket extends BaseModel {
 
-    public $id, $gbuser_id, $site, $amount, $added, $odds, $result;
+    public $id, $gbuser_id, $site, $amount, $added, $odds, $result, $closingdate;
 
     public function __construct($attributes) {
         parent::__construct($attributes);
@@ -32,7 +32,7 @@ class Ticket extends BaseModel {
     }
 
     public function show_open() {
-        $query = DB::connection()->prepare('SELECT DISTINCT Ticket.id, Ticket.site, Ticket.amount, Ticket.added FROM Ticket INNER JOIN Betticket ON Betticket.ticket_id = Ticket.id INNER JOIN Bet ON Bet.id = Betticket.bet_id WHERE Bet.currentstate = 0 AND Ticket.gbuser_id = :gbuser_id' );
+        $query = DB::connection()->prepare('SELECT DISTINCT Ticket.id, Ticket.site, Ticket.amount FROM Ticket INNER JOIN Betticket ON Betticket.ticket_id = Ticket.id INNER JOIN Bet ON Bet.id = Betticket.bet_id WHERE Bet.currentstate = 0 AND Ticket.gbuser_id = :gbuser_id');
         $query->execute(array('gbuser_id' => $_SESSION['gbuser']));
         $rows = $query->fetchAll();
         $tickets = array();
@@ -41,11 +41,11 @@ class Ticket extends BaseModel {
             $ticket = new Ticket(array(
                 'id' => $row['id'],
                 'site' => $row['site'],
-                'amount' => $row['amount'],
-                'added' => $row['added']
+                'amount' => $row['amount']
             ));
             $ticket->amount = $ticket->format_decimals($ticket->amount);
             $ticket->calculateTotalOdds();
+            $ticket->find_closing_date();
             $tickets[] = $ticket;
         }
         return $tickets;
@@ -73,8 +73,8 @@ class Ticket extends BaseModel {
     }
 
     public function save() {
-        $query = DB::connection()->prepare('INSERT INTO Ticket (gbuser_id, site, amount, added) VALUES (:gbuser_id, :site, :amount, :added) RETURNING id');
-        $query->execute(array('gbuser_id' => $this->gbuser_id, 'site' => $this->site, 'amount' => $this->amount, 'added' => $this->added));
+        $query = DB::connection()->prepare('INSERT INTO Ticket (gbuser_id, site, amount) VALUES (:gbuser_id, :site, :amount) RETURNING id');
+        $query->execute(array('gbuser_id' => $this->gbuser_id, 'site' => $this->site, 'amount' => $this->amount));
         $row = $query->fetch();
         $this->id = $row['id'];
         return $this->id;
@@ -100,6 +100,13 @@ class Ticket extends BaseModel {
         $query = DB::connection()->prepare('INSERT INTO BetTicket (ticket_id, bet_id) VALUES (:ticket_id, :bet_id)');
         $query->execute(array('ticket_id' => $this->id, 'bet_id' => $id));
         $this->calculateTotalOdds();
+    }
+
+    public function find_closing_date() {
+        $query = DB::connection()->prepare('SELECT Bet.eventdate FROM Bet INNER JOIN Betticket ON Betticket.bet_id = Bet.id WHERE Betticket.ticket_id = :id ORDER BY Bet.eventdate DESC LIMIT 1');
+        $query->execute(array('id' => $this->id));
+        $row = $query->fetch();
+        $this->closingdate = $row[0];
     }
 
     public function calculateTotalOdds() {
@@ -161,8 +168,8 @@ class Ticket extends BaseModel {
         if (!$this->validate_number($this->amount)) {
             $errors[] = 'Your amount is not a valid number.';
         }
-        
-        if($this->amount <= 0) {
+
+        if ($this->amount <= 0) {
             $errors[] = 'Amount must be bigger than 0!';
         }
 
@@ -172,7 +179,7 @@ class Ticket extends BaseModel {
     public static function format_decimals($number) {
         return number_format((float) $number, 2, '.', '');
     }
-    
+
     public function check_if_open() {
         $query = DB::connection()->prepare('SELECT COUNT(BetTicket.bet_id) FROM Ticket INNER JOIN Betticket ON Betticket.ticket_id = Ticket.id INNER JOIN Bet ON Bet.id = Betticket.bet_id WHERE Bet.currentstate = 0 AND Ticket.gbuser_id = :gbuser_id AND Ticket.id = :id');
         $query->execute(array('gbuser_id' => $_SESSION['gbuser'], 'id' => $this->id));

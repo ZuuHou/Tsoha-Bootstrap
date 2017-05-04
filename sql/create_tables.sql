@@ -10,7 +10,7 @@ CREATE TABLE Ticket(
   gbuser_id INTEGER REFERENCES Gbuser(id),
   site varchar(50),
   amount decimal(10,2) NOT NULL,
-  added DATE
+  added DATE DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE Bet(

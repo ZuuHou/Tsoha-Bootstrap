@@ -47,8 +47,7 @@ class TicketController extends BaseController {
         $ticket = new Ticket(array(
             'gbuser_id' => $_SESSION['gbuser'],
             'site' => $params['site'],
-            'amount' => $params['amount'],
-            'added' => $params['added']
+            'amount' => $params['amount']
         ));
 
         $ticketerrors = $ticket->errors();
